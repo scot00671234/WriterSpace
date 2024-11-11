@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medium Mockup</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #292929;
+            position: relative;
+        }
+
+        nav {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #757575;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #292929;
+        }
+
+        .write-btn {
+            background: #1a8917;
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .write-btn:hover {
+            background: #0f730c;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 7fr 3fr;
+            gap: 2rem;
+        }
+
+        .hero {
+            background: #ffd1b9;
+            padding: 2rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .hero:hover {
+            transform: translateY(-2px);
+        }
+
+        .articles {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .article {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 1rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .article:hover {
+            transform: translateY(-2px);
+        }
+
+        .article img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .article h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metadata {
+            color: #757575;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 5rem;
+            height: fit-content;
+        }
+
+        .topics {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .topic-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .topic {
+            background: #e6e6e6;
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .topic:hover {
+            background: #d1d1d1;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #757575;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-form input,
+        .modal-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #d1d1d1;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .modal-form button {
+            background: #1a8917;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 99px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .modal-form button:hover {
+            background: #0f730c;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #292929;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo" onclick="showToast('Home page')">Medium</div>
+        <div class="nav-links">
+            <a href="#" onclick="showToast('Our Story page')">Our story</a>
+            <a href="#" onclick="showToast('Membership page')">Membership</a>
+            <a href="#" onclick="openSignInModal()">Sign In</a>
+            <a href="#" class="write-btn" onclick="openWriteModal()">Write</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="content">
+            <div class="hero" onclick="showToast('Welcome to Medium!')">
+                <h1>Where good ideas find you</h1>
+                <p>Read and share new perspectives on just about any topic. Everyone's welcome.</p>
+            </div>
+
+            <div class="articles">
+                <article class="article" onclick="openArticle('The Future of Artificial Intelligence in 2024')">
+                    <div class="article-content">
+                        <h2>The Future of Artificial Intelligence in 2024</h2>
+                        <p>Exploring the latest developments in AI and what they mean for humanity...</p>
+                        <div class="metadata">
+                            <img src="/api/placeholder/24/24" alt="Author avatar" style="border-radius: 50%">
+                            <span>Sarah Johnson</span>
+                            <span>•</span>
+                            <span>8 min read</span>
+                        </div>
+                    </div>
+                    <img src="/api/placeholder/200/150" alt="Article thumbnail">
+                </article>
+
+                <article class="article" onclick="openArticle('Why Remote Work is Here to Stay')">
+                    <div class="article-content">
+                        <h2>Why Remote Work is Here to Stay</h2>
+                        <p>The pandemic changed how we work, but the revolution is far from over...</p>
+                        <div class="metadata">
+                            <img src="/api/placeholder/24/24" alt="Author avatar" style="border-radius: 50%">
+                            <span>Michael Chen</span>
+                            <span>•</span>
+                            <span>6 min read</span>
+                        </div>
+                    </div>
+                    <img src="/api/placeholder/200/150" alt="Article thumbnail">
+                </article>
+
+                <article class="article" onclick="openArticle('The Art of Mindful Programming')">
+                    <div class="article-content">
+                        <h2>The Art of Mindful Programming</h2>
+                        <p>How to write better code by being present and focused...</p>
+                        <div class="metadata">
+                            <img src="/api/placeholder/24/24" alt="Author avatar" style="border-radius: 50%">
+                            <span>Alex Rivera</span>
+                            <span>•</span>
+                            <span>12 min read</span>
+                        </div>
+                    </div>
+                    <img src="/api/placeholder/200/150" alt="Article thumbnail">
+                </article>
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="topics">
+                <h3>Discover more of what matters to you</h3>
+                <div class="topic-list">
+                    <span class="topic" onclick="followTopic('Programming')">Programming</span>
+                    <span class="topic" onclick="followTopic('Data Science')">Data Science</span>
+                    <span class="topic" onclick="followTopic('Technology')">Technology</span>
+                    <span class="topic" onclick="followTopic('Self Improvement')">Self Improvement</span>
+                    <span class="topic" onclick="followTopic('Writing')">Writing</span>
+                    <span class="topic" onclick="followTopic('Relationships')">Relationships</span>
+                    <span class="topic" onclick="followTopic('Machine Learning')">Machine Learning</span>
+                    <span class="topic" onclick="followTopic('Productivity')">Productivity</span>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('signInModal')">&times;</span>
+            <h2>Sign In</h2>
+            <form class="modal-form" onsubmit="handleSignIn(event)">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Write Modal -->
+    <div id="writeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('writeModal')">&times;</span>
+            <h2>Write a Story</h2>
+            <form class="modal-form" onsubmit="handleWrite(event)">
+                <input type="text" placeholder="Title" required>
+                <textarea placeholder="Tell your story..." rows="6" required></textarea>
+                <button type="submit">Publish</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Initialize Feather icons
+        feather.replace();
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function openSignInModal() {
+            openModal('signInModal');
+        }
+
+        function openWriteModal() {
+            openModal('writeModal');
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Form handlers
+        function handleSignIn(event) {
+            event.preventDefault();
+            closeModal('signInModal');
+            showToast('Successfully signed in!');
+        }
+
+        function handleWrite(event) {
+            event.preventDefault();
+            closeModal('writeModal');
+            showToast('Story published successfully!');
+        }
+
+        // Topic following
+        function followTopic(topic) {
+            showToast(`Following ${topic}`);
+        }
+
+        // Article opening
+        function openArticle(title) {
+            showToast(`Opening: ${title}`);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
