@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medium Mockup</title>
+    <title>WriterSpace</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
     <style>
         * {
@@ -245,7 +245,7 @@
 </head>
 <body>
     <nav>
-        <div class="logo" onclick="showToast('Home page')">Medium</div>
+        <div class="logo" onclick="showToast('Home page')">WriterSpace</div>
         <div class="nav-links">
             <a href="#" onclick="showToast('Our Story page')">Our story</a>
             <a href="#" onclick="showToast('Membership page')">Membership</a>
@@ -256,7 +256,7 @@
 
     <main>
         <div class="content">
-            <div class="hero" onclick="showToast('Welcome to Medium!')">
+            <div class="hero" onclick="showToast('Welcome to WriterSpace!')">
                 <h1>Where good ideas find you</h1>
                 <p>Read and share new perspectives on just about any topic. Everyone's welcome.</p>
             </div>
